@@ -9,7 +9,7 @@ weather_data$Month<-months(as.Date(weather_data$CST))
 
 # can be reenabled as soon as we've got data for a whole year (start of june or during may)
 # weather_data$Month<-factor(weather_data$Month, levels=rev(unique(lincoln_weather$Month)))
-weather_data$Month<-factor(weather_data$Month, levels=list("June", "July", "August", "September", "October", "November", "December", "January", "February", "March"))
+weather_data$Month<-factor(weather_data$Month, levels=rev(list("June", "July", "August", "September", "October", "November", "December", "January", "February", "March")))
 
 ggplot(weather_data, aes(x = `Temperature`, y = `Month`, fill = ..x..)) +
   geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
