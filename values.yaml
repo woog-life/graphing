@@ -1,0 +1,32 @@
+namespace: wooglife
+
+cronjob:
+  name: graphing
+  image: ghcr.io/woog-life/graphing:__TAG__
+  imagePullPolicy: IfNotPresent
+  schedule: "CRON_TZ=UTC 0 0 * * *"
+  backoffLimit: 0
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  restartPolicy: Never
+  labels:
+    app: graphing
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limit:
+    cpu: 300m
+    memory: 300Mi
+  configmaps:
+    - backend-postgres-config
+  secrets:
+    - woog-secrets
+
+configmap:
+  name: graphing-config
+  backendUrl: "http://backend:8080"
+  accessKeyId: __ACCESS_KEY_ID__
+
+secret:
+  name: graphing-twitter
+  secretAccessKey: __SECRET_ACCESS_KEY__
