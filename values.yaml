@@ -27,6 +27,7 @@ configmap:
   backendUrl: "http://backend:8080"
   accessKeyId: __ACCESS_KEY_ID__
   bucketName: wooglife
+  s3Endpoint: sos-de-fra-1.exo.io
 
 secret:
   name: graphing-exoscale

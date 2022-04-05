@@ -7,3 +7,4 @@ data:
   BACKEND_URL: "{{ .Values.configmap.backendUrl }}"
   ACCESS_KEY_ID: "{{ .Values.configmap.accessKeyId }}"
   BUCKET_NAME: "{{ .Values.configmap.bucketName }}"
+  AWS_S3_ENDPOINT: "{{ .Values.configmap.s3Endpoint }}"
