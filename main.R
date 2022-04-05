@@ -14,9 +14,6 @@ retrieveDataFrameForLakeId <- function(con, lakeId) {
   data_frame$CST <- with(data_frame, as.Date(timestamp))
   data_frame$Month <- months(as.Date(data_frame$CST))
 
-  # delete this in may/june
-  data_frame$Month <- factor(data_frame$Month, levels = rev(list("June", "July", "August", "September", "October", "November", "December", "January", "February", "March", "April")))
-
   return(data_frame)
 }
 
