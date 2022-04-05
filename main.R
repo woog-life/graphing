@@ -75,7 +75,14 @@ for (i in 1:length(lakes)) {
 
   createPlot(data_frame, title, filename)
 
+  bucket <- "wooglife"
   # # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
   # # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
-  put_object(file = filename, object = filename, bucket = "wooglife", region = "")
+  tryCatch(
+    put_object(file = filename, object = filename, bucket = bucket, region = ""),
+    error=function(err) {
+      print(paste0("failed to put '", filename, "' into '", bucket, "' bucket:"))
+      print(err)
+    }
+  )
 }
