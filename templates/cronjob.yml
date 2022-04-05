@@ -32,7 +32,7 @@ spec:
               - configMapRef:
                   name: {{ .Values.configmap.name }}
               {{- range $configmapName := .Values.cronjob.configmaps }}
-              - secretRef:
+              - configMapRef:
                   name: {{ $configmapName }}
               {{- end }}
             resources:
