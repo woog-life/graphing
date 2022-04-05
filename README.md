@@ -19,7 +19,15 @@ python main.py
 
 Run R script on generated CSV
 
-- Install dependencies from [DESCRIPTION](DESCRIPTION)
+- Install dependencies from [DESCRIPTION](DESCRIPTION) via renv:
+```R
+install.packages('renv')
+
+# {restart session}
+
+library(renv)
+renv::install()
+```
 
 ```bash
 R -f main.R
