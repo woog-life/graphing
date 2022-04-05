@@ -45,7 +45,11 @@ lakeFromApi <- function(lakeId) {
   url <- modify_url("https://api.woog.life", path = paste0("lake/", lakeId))
   response <- GET(url)
 
-  fromJSON(content(response, "text"), simplifyVector = FALSE)
+  if (response$status_code == 200) {
+    fromJSON(content(response, "text"), simplifyVector = FALSE)
+  } else {
+    NULL
+  }
 }
 
 # Connect to a specific postgres database i.e. Heroku
@@ -61,13 +65,17 @@ for (i in 1:length(lakes)) {
   lake <- lakes[[i]]
 
   data_frame <- retrieveDataFrameForLakeId(con, lake$id)
-  lake <- lakeFromApi(lake$id)
+  apiLake <- lakeFromApi(lake$id)
+  if (is.null(apiLake)) {
+    print(paste0("failed to retrieve data for '", lake$id, "'"))
+    next
+  }
   title <- lake$name
   filename <- paste0(lake$id, ".png")
 
   createPlot(data_frame, title, filename)
 
-  # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
-  # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
+  # # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
+  # # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
   put_object(file = filename, object = filename, bucket = "wooglife", region = "")
 }
