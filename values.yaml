@@ -28,5 +28,5 @@ configmap:
   accessKeyId: __ACCESS_KEY_ID__
 
 secret:
-  name: graphing-twitter
+  name: graphing-exoscale
   secretAccessKey: __SECRET_ACCESS_KEY__

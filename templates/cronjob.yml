@@ -25,8 +25,16 @@ spec:
             envFrom:
               - secretRef:
                   name: {{ .Values.secret.name }}
+              {{- range $secretName := .Values.cronjob.secrets }}
+              - secretRef:
+                  name: {{ $secretName }}
+              {{- end }}
               - configMapRef:
                   name: {{ .Values.configmap.name }}
+              {{- range $configmapName := .Values.cronjob.configmaps }}
+              - secretRef:
+                  name: {{ $configmapName }}
+              {{- end }}
             resources:
               requests:
                 cpu: {{ .Values.cronjob.requests.cpu }}
