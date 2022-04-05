@@ -26,6 +26,7 @@ configmap:
   name: graphing-config
   backendUrl: "http://backend:8080"
   accessKeyId: __ACCESS_KEY_ID__
+  bucketName: wooglife
 
 secret:
   name: graphing-exoscale

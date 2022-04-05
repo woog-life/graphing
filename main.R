@@ -49,6 +49,11 @@ lakeFromApi <- function(lakeId) {
   }
 }
 
+bucketName <- Sys.getenv("BUCKET_NAME", unset=NA)
+if (is.na(bucketName)) {
+  bucketName <- "wooglife"
+}
+
 # Connect to a specific postgres database i.e. Heroku
 con <- dbConnect(RPostgres::Postgres(), dbname = Sys.getenv("POSTGRES_DB"),
                  host = Sys.getenv("POSTGRES_HOSTNAME"),
@@ -72,13 +77,12 @@ for (i in 1:length(lakes)) {
 
   createPlot(data_frame, title, filename)
 
-  bucket <- "wooglife"
   # # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
   # # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
   tryCatch(
-    put_object(file = filename, object = filename, bucket = bucket, region = ""),
+    put_object(file = filename, object = filename, bucket = bucketName, region = ""),
     error=function(err) {
-      print(paste0("failed to put '", filename, "' into '", bucket, "' bucket:"))
+      print(paste0("failed to put '", filename, "' into '", bucketName, "' bucket:"))
       print(err)
     }
   )

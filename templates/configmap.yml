@@ -6,3 +6,4 @@ metadata:
 data:
   BACKEND_URL: "{{ .Values.configmap.backendUrl }}"
   ACCESS_KEY_ID: "{{ .Values.configmap.accessKeyId }}"
+  BUCKET_NAME: "{{ .Values.configmap.bucketName }}"
