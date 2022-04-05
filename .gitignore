@@ -8,3 +8,6 @@ venv/
 *.csv
 *.png
 *.pdf
+
+.Rhistory
+TODO.md
