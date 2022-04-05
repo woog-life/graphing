@@ -1,1 +1,1 @@
-Imports: ggridges, ggplot2, viridis, hrbrthemes
+Imports: ggridges, ggplot2, viridis, hrbrthemes, RPostgres, aws.s3
