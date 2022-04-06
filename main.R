@@ -95,7 +95,7 @@ for (i in 1:length(lakes)) {
     print(paste0("failed to retrieve data for '", lake$id, "'"))
     next
   }
-  title <- lake$name
+  title <- paste0(lake$name, " ( ", nrow(data_frame), " Datenpunkte)")
   filename <- paste0(lake$id, ".svg")
 
   createPlot(data_frame, title, filename)
