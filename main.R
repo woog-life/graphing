@@ -7,12 +7,33 @@ library(aws.s3)
 library(httr)
 library(jsonlite)
 
+monthConversion <- c(
+  "January" = "Januar",
+  "February" = "Februar",
+  "March" = "März",
+  "April" = "April",
+  "May" = "Mai",
+  "June" = "Juni",
+  "July" = "Juli",
+  "August" = "August",
+  "September" = "September",
+  "October" = "Oktober",
+  "November" = "November",
+  "December" = "Dezember"
+)
+
+convertMonth <- function(m) {
+  return(monthConversion[m])
+}
+
 retrieveDataFrameForLakeId <- function(con, lakeId) {
   query <- paste0("SELECT * FROM lake_data WHERE lake_id='", lakeId, "';")
   dtab <- dbGetQuery(con, query)
   data_frame <- as.data.frame(dtab)
   data_frame$CST <- with(data_frame, as.Date(timestamp))
   data_frame$Month <- months(as.Date(data_frame$CST))
+  data_frame$Month <- mapply(convertMonth, data_frame$Month)
+  data_frame$Month <- factor(data_frame$Month, levels = rev(list('Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember')))
 
   return(data_frame)
 }
@@ -22,6 +43,8 @@ createPlot <- function(data_frame, title, filename) {
     geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
     scale_fill_viridis(name = "Temp. [F]", option = "C") +
     labs(title = title) +
+    xlab("Temperatur") +
+    ylab("Monat") +
     theme(
       legend.position = "none",
       panel.spacing = unit(0.1, "lines"),
@@ -49,7 +72,7 @@ lakeFromApi <- function(lakeId) {
   }
 }
 
-bucketName <- Sys.getenv("BUCKET_NAME", unset=NA)
+bucketName <- Sys.getenv("BUCKET_NAME", unset = NA)
 if (is.na(bucketName)) {
   bucketName <- "wooglife"
 }
@@ -73,7 +96,7 @@ for (i in 1:length(lakes)) {
     next
   }
   title <- lake$name
-  filename <- paste0(lake$id, ".png")
+  filename <- paste0("test-", lake$id, ".png")
 
   createPlot(data_frame, title, filename)
 
