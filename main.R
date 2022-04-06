@@ -96,7 +96,7 @@ for (i in 1:length(lakes)) {
     next
   }
   title <- lake$name
-  filename <- paste0(lake$id, ".png")
+  filename <- paste0(lake$id, ".svg")
 
   createPlot(data_frame, title, filename)
 
