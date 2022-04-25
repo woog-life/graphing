@@ -86,7 +86,7 @@ con <- dbConnect(RPostgres::Postgres(), dbname = Sys.getenv("POSTGRES_DB"),
 
 lakes <- getLakeIds()$lakes
 
-for (i in 1:length(lakes)) {
+for (i in seq_along(lakes)) {
   lake <- lakes[[i]]
 
   data_frame <- retrieveDataFrameForLakeId(con, lake$id)
