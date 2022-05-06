@@ -38,21 +38,16 @@ retrieveDataFrameForLakeId <- function(con, lakeId) {
   return(data_frame)
 }
 
-createPlot <- function(data_frame, title, filename) {
-  dateFormat <- "%d.%m.%Y"
-  firstDate <- format(head(data_frame$CST[[6]]), format = dateFormat)
-  lastDate <- format(tail(data_frame$CST)[[6]], format = dateFormat)
-  ylabel <- paste("Month", firstDate, "-", lastDate)
-
+createPlot <- function(data_frame, title, subtitle, filename) {
   ggplot(data_frame, aes(x = `temperature`, y = `Month`, fill = ..x..)) +
     stat_density_ridges(
       geom = "density_ridges_gradient", calc_ecdf = TRUE,
       quantiles = 3, quantile_lines = TRUE
     ) +
     scale_fill_viridis(name = "Temp. [F]", option = "C") +
-    labs(title = title) +
+    labs(title = title, subtitle = subtitle) +
     xlab("Temperatur") +
-    ylab(ylabel) +
+    ylab("Month") +
     theme(
       legend.position = "none",
       panel.spacing = unit(0.1, "lines"),
@@ -103,10 +98,16 @@ for (i in seq_along(lakes)) {
     print(paste0("failed to retrieve data for '", lake$id, "'"))
     next
   }
+
+  dateFormat <- "%d.%m.%Y"
+  firstDate <- format(head(data_frame$CST[[6]]), format = dateFormat)
+  lastDate <- format(tail(data_frame$CST)[[6]], format = dateFormat)
+  subtitle <- paste(firstDate, "-", lastDate)
+
   title <- paste0(lake$name, " (", nrow(data_frame), " Datenpunkte)")
   filename <- paste0(lake$id, ".svg")
 
-  createPlot(data_frame, title, filename)
+  createPlot(data_frame, title, subtitle, filename)
 
   # # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
   # # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
