@@ -39,6 +39,11 @@ retrieveDataFrameForLakeId <- function(con, lakeId) {
 }
 
 createPlot <- function(data_frame, title, filename) {
+  dateFormat <- "%d.%m.%Y"
+  firstDate <- format(head(data_frame$CST[[6]]), format = dateFormat)
+  lastDate <- format(tail(data_frame$CST)[[6]], format = dateFormat)
+  ylabel <- paste("Month", firstDate, "-", lastDate)
+
   ggplot(data_frame, aes(x = `temperature`, y = `Month`, fill = ..x..)) +
     stat_density_ridges(
       geom = "density_ridges_gradient", calc_ecdf = TRUE,
@@ -47,7 +52,7 @@ createPlot <- function(data_frame, title, filename) {
     scale_fill_viridis(name = "Temp. [F]", option = "C") +
     labs(title = title) +
     xlab("Temperatur") +
-    ylab("Monat") +
+    ylab(ylabel) +
     theme(
       legend.position = "none",
       panel.spacing = unit(0.1, "lines"),
@@ -106,8 +111,8 @@ for (i in seq_along(lakes)) {
   # # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
   # # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
   tryCatch(
-    put_object(file = filename, object = filename, bucket = bucketName, region = "", acl="public-read"),
-    error=function(err) {
+    put_object(file = filename, object = filename, bucket = bucketName, region = "", acl = "public-read"),
+    error = function(err) {
       print(paste0("failed to put '", filename, "' into '", bucketName, "' bucket:"))
       print(err)
     }
