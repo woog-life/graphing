@@ -40,7 +40,10 @@ retrieveDataFrameForLakeId <- function(con, lakeId) {
 
 createPlot <- function(data_frame, title, filename) {
   ggplot(data_frame, aes(x = `temperature`, y = `Month`, fill = ..x..)) +
-    geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+    stat_density_ridges(
+      geom = "density_ridges_gradient", calc_ecdf = TRUE,
+      quantiles = 3, quantile_lines = TRUE
+    ) +
     scale_fill_viridis(name = "Temp. [F]", option = "C") +
     labs(title = title) +
     xlab("Temperatur") +
