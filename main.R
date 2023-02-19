@@ -75,10 +75,7 @@ lakeFromApi <- function(lakeId) {
   }
 }
 
-bucketName <- Sys.getenv("BUCKET_NAME", unset = NA)
-if (is.na(bucketName)) {
-  bucketName <- "wooglife"
-}
+bucketName <- Sys.getenv("BUCKET_NAME", unset = "wooglife")
 
 # Connect to a specific postgres database i.e. Heroku
 con <- dbConnect(RPostgres::Postgres(), dbname = Sys.getenv("POSTGRES_DB"),
