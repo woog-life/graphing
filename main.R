@@ -57,15 +57,19 @@ createPlot <- function(data_frame, title, subtitle, filename) {
   ggsave(filename)
 }
 
+apiUrl <- function() {
+    Sys.getenv("API_URL", unset = "http://backend:8080")
+}
+
 getLakeIds <- function() {
-  url <- modify_url("https://api.woog.life", path = "lake")
+  url <- modify_url(apiUrl(), path = "lake")
   response <- GET(url)
 
   fromJSON(content(response, "text"), simplifyVector = FALSE)
 }
 
 lakeFromApi <- function(lakeId) {
-  url <- modify_url("https://api.woog.life", path = paste0("lake/", lakeId))
+  url <- modify_url(apiUrl(), path = paste0("lake/", lakeId))
   response <- GET(url)
 
   if (response$status_code == 200) {
