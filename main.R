@@ -102,8 +102,9 @@ for (i in seq_along(lakes)) {
   }
 
   dateFormat <- "%d.%m.%Y"
-  firstDate <- format(head(data_frame$CST[[6]]), format = dateFormat)
-  lastDate <- format(tail(data_frame$CST)[[6]], format = dateFormat)
+
+  firstDate <- format(head(data_frame$CST[[1]]), format = dateFormat)
+  lastDate <- format(tail(data_frame$CST)[[1]], format = dateFormat)
   subtitle <- paste(firstDate, "-", lastDate)
 
   title <- paste0(lake$name, " (", nrow(data_frame), " Datenpunkte)")
