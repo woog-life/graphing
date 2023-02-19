@@ -18,7 +18,7 @@ cronjob:
     cpu: 300m
     memory: 300Mi
   configmaps:
-    - backend-postgres-config
+    - backend-config
   secrets:
     - woog-secrets
 
