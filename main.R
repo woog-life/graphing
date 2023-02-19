@@ -6,6 +6,7 @@ library(DBI)
 library(aws.s3)
 library(httr)
 library(jsonlite)
+library(svglite)
 
 monthConversion <- c(
   "January" = "Januar",
