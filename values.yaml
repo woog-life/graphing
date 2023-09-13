@@ -4,7 +4,7 @@ cronjob:
   name: graphing
   image: ghcr.io/woog-life/graphing:__TAG__
   imagePullPolicy: IfNotPresent
-  schedule: "CRON_TZ=UTC 0 0 * * *"
+  schedule: "0 0 * * *"
   backoffLimit: 0
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
