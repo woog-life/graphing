@@ -40,7 +40,7 @@ retrieveDataFrameForLakeId <- function(con, lakeId) {
 }
 
 createPlot <- function(data_frame, title, subtitle, filename) {
-  ggplot(data_frame, aes(x = `temperature`, y = `Month`, fill = ..x..)) +
+  ggplot(data_frame, aes(x = `temperature`, y = `Month`, fill = after_stat(x))) +
     stat_density_ridges(
       geom = "density_ridges_gradient", calc_ecdf = TRUE,
       quantiles = 3, quantile_lines = TRUE
@@ -58,8 +58,24 @@ createPlot <- function(data_frame, title, subtitle, filename) {
   ggsave(filename)
 }
 
+createLinePlot <- function(df, title, subtitle, filename) {
+  ggplot(df, aes(y = `temperature`, x = `timestamp`)) +
+    geom_line() +
+    scale_fill_viridis(name = "Temp. [F]", option = "C") +
+    labs(title = title, subtitle = subtitle) +
+    xlab("Monat") +
+    ylab("Temperatur") +
+    theme(
+      legend.position = "none",
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    )
+
+  ggsave(filename)
+}
+
 apiUrl <- function() {
-    Sys.getenv("API_URL", unset = "http://backend:8080")
+  Sys.getenv("API_URL", unset = "http://backend:8080")
 }
 
 getLakeIds <- function() {
@@ -109,11 +125,21 @@ for (i in seq_along(lakes)) {
 
   title <- paste0(lake$name, " (", nrow(data_frame), " Datenpunkte)")
   filename <- paste0(lake$id, ".svg")
+  filename_line <- paste0(lake$id, "_line.svg")
 
   createPlot(data_frame, title, subtitle, filename)
 
-  # # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
-  # # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
+  # we only care about a shorter timeframe with the linegraph
+  df <- tail(data_frame, 1440)
+  firstDate <- format(head(df$CST[[1]]), format = dateFormat)
+  lastDate <- format(tail(df$CST)[[1]], format = dateFormat)
+  subtitle <- paste(firstDate, "-", lastDate)
+
+  title <- paste0(lake$name, " (", nrow(df), " Datenpunkte)")
+  createLinePlot(df, title, subtitle, filename_line)
+  break
+  # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
+  # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
   tryCatch(
     put_object(file = filename, object = filename, bucket = bucketName, region = "", acl = "public-read"),
     error = function(err) {
@@ -122,3 +148,5 @@ for (i in seq_along(lakes)) {
     }
   )
 }
+
+dbDisconnect(con)
