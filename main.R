@@ -137,7 +137,6 @@ for (i in seq_along(lakes)) {
 
   title <- paste0(lake$name, " (", nrow(df), " Datenpunkte)")
   createLinePlot(df, title, subtitle, filename_line)
-  break
   # `region` must be empty, the s3 library automatically transforms the url to this: `{region}.{endpoint}`
   # this doesn't work well with the exoscale endpoint since it's `sos-{region}.exo.io`
   tryCatch(
