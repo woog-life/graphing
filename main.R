@@ -146,6 +146,13 @@ for (i in seq_along(lakes)) {
       print(err)
     }
   )
+  tryCatch(
+    put_object(file = filename_line, object = filename_line, bucket = bucketName, region = "", acl = "public-read"),
+    error = function(err) {
+      print(paste0("failed to put '", filename_line, "' into '", bucketName, "' bucket:"))
+      print(err)
+    }
+  )
 }
 
 dbDisconnect(con)
