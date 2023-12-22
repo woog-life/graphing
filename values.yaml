@@ -16,7 +16,7 @@ cronjob:
     memory: 100Mi
   limit:
     cpu: 300m
-    memory: 300Mi
+    memory: 500Mi
   configmaps:
     - backend-config
   secrets:
