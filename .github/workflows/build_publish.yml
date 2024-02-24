@@ -12,11 +12,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: update tag in manifest.yml
         run: sed -i -e "s#__TAG__#${GITHUB_SHA}#g" values.yaml
-      - uses: WyriHaximus/github-action-helm3@v2
+      - uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm lint
           kubeconfig: ${{ secrets.KUBECONFIG_RAW }}
-      - uses: WyriHaximus/github-action-helm3@v2
+      - uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm lint --strict
           kubeconfig: ${{ secrets.KUBECONFIG_RAW }}
@@ -45,7 +45,7 @@ jobs:
         run: sed -i -e "s#__TAG__#${GITHUB_SHA}#g" values.yaml
       - run: sed -i -e "s/__ACCESS_KEY_ID__/${{ secrets.EXOSCALE_WOOGLIFE_PUTOBJECT_ACCESS_KEY }}/g" values.yaml
       - run: sed -i -e "s/__SECRET_ACCESS_KEY__/${{ secrets.EXOSCALE_WOOGLIFE_PUTOBJECT_ACCESS_SECRET }}/g" values.yaml
-      - uses: WyriHaximus/github-action-helm3@v2
+      - uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm upgrade graphing . --install --namespace=wooglife --atomic
           kubeconfig: ${{ secrets.KUBECONFIG_RAW }}
